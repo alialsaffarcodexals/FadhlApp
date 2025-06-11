@@ -1,6 +1,6 @@
 # FadhlApp
 
-Simple Java Swing application for managing personal social media content. Includes a fullscreen login page and a grid-based dashboard for videos, photos, websites and account information. Supports basic add/delete/search actions, a light/dark theme toggle and simple hover animations.
+Simple Java Swing application for managing personal social media content. It opens with a fullscreen login page that greets Fadhl. After logging in, a dark themed main menu shows the different sections (videos, photos, websites and accounts) in a 2×3 grid. Clicking any item opens a dedicated window with add/delete/search features.
 
 Run with:
 

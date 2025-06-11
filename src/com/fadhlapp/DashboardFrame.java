@@ -2,10 +2,12 @@ package com.fadhlapp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+
+import com.fadhlapp.Theme;
 
 public class DashboardFrame extends JFrame {
     private DataStore store = new DataStore();
-    private boolean dark = false;
 
     public DashboardFrame() {
         super("Fadhl Dashboard");
@@ -16,44 +18,61 @@ public class DashboardFrame extends JFrame {
     }
 
     private void setupUI() {
-        JPanel grid = new JPanel(new GridLayout(2, 3, 10, 10));
-        grid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel grid = new JPanel(new GridLayout(2, 3, 20, 20));
+        grid.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+        grid.setBackground(Theme.BG);
 
-        grid.add(wrapPanel("YouTube Videos", new MediaPanel(store.getYoutubeVideos())));
-        grid.add(wrapPanel("Instagram Videos", new MediaPanel(store.getInstagramVideos())));
-        grid.add(wrapPanel("Instagram Photos", new MediaPanel(store.getInstagramPhotos())));
-        grid.add(wrapPanel("Personal Photos", new MediaPanel(store.getPersonalPhotos())));
-        grid.add(wrapPanel("Websites", new WebsitesPanel(store.getWebsites())));
-        grid.add(wrapPanel("Accounts", new AccountsPanel(store.getAccounts())));
+        JButton yt = createButton("YouTube Videos");
+        yt.addActionListener(e -> openMedia("YouTube Videos", store.getYoutubeVideos()));
+        grid.add(yt);
 
-        add(new JScrollPane(grid), BorderLayout.CENTER);
+        JButton igv = createButton("Instagram Videos");
+        igv.addActionListener(e -> openMedia("Instagram Videos", store.getInstagramVideos()));
+        grid.add(igv);
 
-        JButton themeBtn = new JButton("Toggle Theme");
-        add(themeBtn, BorderLayout.SOUTH);
-        themeBtn.addActionListener(e -> toggleTheme());
+        JButton igp = createButton("Instagram Photos");
+        igp.addActionListener(e -> openMedia("Instagram Photos", store.getInstagramPhotos()));
+        grid.add(igp);
+
+        JButton personal = createButton("Personal Photos");
+        personal.addActionListener(e -> openMedia("Personal Photos", store.getPersonalPhotos()));
+        grid.add(personal);
+
+        JButton web = createButton("Websites");
+        web.addActionListener(e -> openWebsites());
+        grid.add(web);
+
+        JButton acc = createButton("Accounts");
+        acc.addActionListener(e -> openAccounts());
+        grid.add(acc);
+
+        add(grid, BorderLayout.CENTER);
+        Theme.apply(this.getContentPane());
     }
 
-    private JPanel wrapPanel(String title, JComponent component) {
-        JPanel p = new JPanel(new BorderLayout());
-        p.setBorder(BorderFactory.createTitledBorder(title));
-        p.add(component, BorderLayout.CENTER);
-        return p;
+    private JButton createButton(String text) {
+        JButton b = new JButton(text);
+        b.setFont(new Font("SansSerif", Font.BOLD, 22));
+        b.setBackground(Theme.BLUE);
+        b.setForeground(Theme.FG);
+        return b;
     }
 
-    private void toggleTheme() {
-        dark = !dark;
-        Color bg = dark ? Color.DARK_GRAY : Color.LIGHT_GRAY;
-        Color fg = dark ? Color.WHITE : Color.BLACK;
-        SwingUtilities.invokeLater(() -> applyTheme(this.getContentPane(), bg, fg));
+    private void openMedia(String title, List<MediaItem> items) {
+        MediaFrame f = new MediaFrame(title, items, this);
+        f.setVisible(true);
+        this.setVisible(false);
     }
 
-    private void applyTheme(Container c, Color bg, Color fg) {
-        for(Component comp : c.getComponents()) {
-            comp.setBackground(bg);
-            comp.setForeground(fg);
-            if(comp instanceof Container) {
-                applyTheme((Container) comp, bg, fg);
-            }
-        }
+    private void openWebsites() {
+        WebsitesFrame f = new WebsitesFrame(store.getWebsites(), this);
+        f.setVisible(true);
+        this.setVisible(false);
+    }
+
+    private void openAccounts() {
+        AccountsFrame f = new AccountsFrame(store.getAccounts(), this);
+        f.setVisible(true);
+        this.setVisible(false);
     }
 }

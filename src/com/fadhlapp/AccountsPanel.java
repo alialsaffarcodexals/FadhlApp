@@ -6,6 +6,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fadhlapp.Theme;
+
 public class AccountsPanel extends JPanel {
     private DefaultTableModel model = new DefaultTableModel(new Object[]{"Name","Email","Password"},0);
     private JTable table = new JTable(model);
@@ -100,5 +102,7 @@ public class AccountsPanel extends JPanel {
                 model.addRow(new Object[]{a.getName(), a.getEmail(), a.getPassword()});
             }
         }));
+
+        Theme.apply(this);
     }
 }

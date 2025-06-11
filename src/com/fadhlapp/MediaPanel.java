@@ -2,9 +2,12 @@ package com.fadhlapp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.fadhlapp.Theme;
 
 public class MediaPanel extends JPanel {
     private DefaultListModel<MediaItem> model = new DefaultListModel<>();
@@ -15,14 +18,33 @@ public class MediaPanel extends JPanel {
 
     public MediaPanel(List<MediaItem> items) {
         setLayout(new BorderLayout());
-        list.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        list.setVisibleRowCount(-1);
+        list.setFixedCellWidth(160);
+        list.setFixedCellHeight(160);
         list.setCellRenderer((lst, value, index, isSelected, cellHasFocus) -> {
-            String text = value.getName() + " (" + value.getDateAdded().format(DateTimeFormatter.ISO_DATE) + ")";
-            JLabel lab = new JLabel(text);
-            lab.setFont(new Font("SansSerif", Font.PLAIN, 16));
-            if(isSelected) lab.setBackground(new Color(200,200,255));
-            lab.setOpaque(true);
-            return lab;
+            JPanel p = new JPanel(new BorderLayout());
+            p.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            JLabel imgLab;
+            File f = new File(value.getPath());
+            if(f.exists() && isImageFile(f.getName())) {
+                ImageIcon ic = new ImageIcon(value.getPath());
+                Image scaled = ic.getImage().getScaledInstance(140, 100, Image.SCALE_SMOOTH);
+                imgLab = new JLabel(new ImageIcon(scaled));
+            } else {
+                imgLab = new JLabel("[media]");
+                imgLab.setHorizontalAlignment(SwingConstants.CENTER);
+            }
+            JLabel name = new JLabel(value.getName(), SwingConstants.CENTER);
+            name.setFont(new Font("SansSerif", Font.PLAIN, 14));
+            JLabel date = new JLabel(value.getDateAdded().format(DateTimeFormatter.ISO_DATE), SwingConstants.CENTER);
+            date.setFont(new Font("SansSerif", Font.PLAIN, 12));
+            p.add(imgLab, BorderLayout.CENTER);
+            JPanel b = new JPanel(new GridLayout(2,1));
+            b.add(name); b.add(date);
+            p.add(b, BorderLayout.SOUTH);
+            if(isSelected) p.setBackground(new Color(80,80,80));
+            return p;
         });
         add(new JScrollPane(list), BorderLayout.CENTER);
 
@@ -99,5 +121,12 @@ public class MediaPanel extends JPanel {
                 model.addElement(m);
             }
         }));
+
+        Theme.apply(this);
+    }
+
+    private boolean isImageFile(String name) {
+        String n = name.toLowerCase();
+        return n.endsWith(".png") || n.endsWith(".jpg") || n.endsWith(".jpeg") || n.endsWith(".gif");
     }
 }

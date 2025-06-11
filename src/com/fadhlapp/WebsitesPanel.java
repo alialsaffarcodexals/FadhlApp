@@ -7,6 +7,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fadhlapp.Theme;
+
 public class WebsitesPanel extends JPanel {
     private DefaultListModel<Website> model = new DefaultListModel<>();
     private JList<Website> list = new JList<>(model);
@@ -18,23 +20,21 @@ public class WebsitesPanel extends JPanel {
         setLayout(new BorderLayout());
         list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         list.setVisibleRowCount(-1);
-        list.setFixedCellWidth(150);
-        list.setFixedCellHeight(120);
+        list.setFixedCellWidth(200);
+        list.setFixedCellHeight(80);
         list.setCellRenderer((jlist, value, index, isSelected, focus) -> {
-            JPanel p = new JPanel(new BorderLayout());
-            JLabel icon = new JLabel(UIManager.getIcon("OptionPane.informationIcon"));
-            icon.setHorizontalAlignment(SwingConstants.CENTER);
-            JLabel name = new JLabel(value.getName());
-            name.setFont(new Font("SansSerif", Font.BOLD, 16));
-            name.setHorizontalAlignment(SwingConstants.CENTER);
-            p.add(icon, BorderLayout.CENTER);
-            p.add(name, BorderLayout.SOUTH);
-            if(isSelected) p.setBackground(new Color(200,200,255));
-            return p;
+            JLabel name = new JLabel(value.getName(), SwingConstants.CENTER);
+            name.setFont(new Font("SansSerif", Font.BOLD, 20));
+            name.setBorder(BorderFactory.createLineBorder(Theme.YELLOW));
+            name.setOpaque(true);
+            name.setBackground(isSelected ? Theme.RED : Theme.BG);
+            name.setForeground(Theme.FG);
+            return name;
         });
         add(new JScrollPane(list), BorderLayout.CENTER);
 
         JPanel input = new JPanel();
+        input.setBackground(Theme.BG);
         JLabel nLab = new JLabel("Name:");
         nLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
         input.add(nLab);
@@ -59,6 +59,7 @@ public class WebsitesPanel extends JPanel {
         add(input, BorderLayout.NORTH);
 
         JPanel bottom = new JPanel();
+        bottom.setBackground(Theme.BG);
         JLabel sLab = new JLabel("Search:");
         sLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
         bottom.add(sLab);
@@ -123,5 +124,7 @@ public class WebsitesPanel extends JPanel {
                 model.addElement(w);
             }
         }));
+
+        Theme.apply(this);
     }
 }
