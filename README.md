@@ -1,6 +1,6 @@
 # FadhlApp (Web Version)
 
-This project now uses Go to serve a small web application that replaces the old Java Swing GUI. The app presents a login screen and, when authenticated, a dashboard with links to the Media, Websites and Accounts pages. Each page is rendered using HTML templates and styled with simple CSS.
+This project uses Go to serve a small web application that replaces the old Java Swing GUI. After logging in you are taken directly to a dashboard with links to the Media, Websites and Accounts pages. Each page is rendered using HTML templates and styled with a simple dark theme.
 
 Run the server on port **1111**:
 

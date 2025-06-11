@@ -53,7 +53,7 @@ func loginPage(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	if r.Form.Get("username") == "Fadhl" && r.Form.Get("password") == "1234" {
-		http.SetCookie(w, &http.Cookie{Name: "auth", Value: "1"})
+               http.SetCookie(w, &http.Cookie{Name: "auth", Value: "1", Path: "/"})
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 		return
 	}
