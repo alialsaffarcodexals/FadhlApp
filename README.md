@@ -1,10 +1,11 @@
-# FadhlApp
+# FadhlApp (Web Version)
 
-Simple Java Swing application for managing personal social media content. It opens with a fullscreen login page that greets Fadhl. After logging in, a dark themed main menu shows the different sections (videos, photos, websites and accounts) in a 2×3 grid. Clicking any item opens a dedicated window with add/delete/search features.
+This project now uses Go to serve a small web application that replaces the old Java Swing GUI. The app presents a login screen and, when authenticated, a dashboard with links to the Media, Websites and Accounts pages. Each page is rendered using HTML templates and styled with simple CSS.
 
-Run with:
+Run the server on port **1111**:
 
 ```bash
-javac -d out $(find src -name '*.java')
-java -cp out com.fadhlapp.Main
+go run server.go
 ```
+
+Then open `http://localhost:1111` in your browser.
