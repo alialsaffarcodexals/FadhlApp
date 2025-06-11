@@ -15,25 +15,57 @@ public class MediaPanel extends JPanel {
 
     public MediaPanel(List<MediaItem> items) {
         setLayout(new BorderLayout());
-        list.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+        list.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        list.setCellRenderer((lst, value, index, isSelected, cellHasFocus) -> {
             String text = value.getName() + " (" + value.getDateAdded().format(DateTimeFormatter.ISO_DATE) + ")";
-            return new JLabel(text);
+            JLabel lab = new JLabel(text);
+            lab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            if(isSelected) lab.setBackground(new Color(200,200,255));
+            lab.setOpaque(true);
+            return lab;
         });
         add(new JScrollPane(list), BorderLayout.CENTER);
 
         JPanel input = new JPanel();
-        input.add(new JLabel("Name:"));
+        JLabel nLab = new JLabel("Name:");
+        nLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        input.add(nLab);
+        nameField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         input.add(nameField);
-        input.add(new JLabel("Path:"));
+        JLabel pLab = new JLabel("Path:");
+        pLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        input.add(pLab);
+        pathField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         input.add(pathField);
         JButton addBtn = new JButton("Add");
+        addBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        addBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                addBtn.setFont(addBtn.getFont().deriveFont(18f));
+            }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                addBtn.setFont(addBtn.getFont().deriveFont(16f));
+            }
+        });
         input.add(addBtn);
         add(input, BorderLayout.NORTH);
 
         JPanel bottom = new JPanel();
-        bottom.add(new JLabel("Search:"));
+        JLabel sLab = new JLabel("Search:");
+        sLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        bottom.add(sLab);
+        searchField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         bottom.add(searchField);
         JButton delBtn = new JButton("Delete");
+        delBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        delBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mouseEntered(java.awt.event.MouseEvent e) {
+                delBtn.setFont(delBtn.getFont().deriveFont(18f));
+            }
+            @Override public void mouseExited(java.awt.event.MouseEvent e) {
+                delBtn.setFont(delBtn.getFont().deriveFont(16f));
+            }
+        });
         bottom.add(delBtn);
         add(bottom, BorderLayout.SOUTH);
 

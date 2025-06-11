@@ -2,6 +2,8 @@ package com.fadhlapp;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,24 +16,82 @@ public class WebsitesPanel extends JPanel {
 
     public WebsitesPanel(List<Website> websites) {
         setLayout(new BorderLayout());
-        list.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new JLabel(value.getName()+" - "+value.getUrl()));
+        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        list.setVisibleRowCount(-1);
+        list.setFixedCellWidth(150);
+        list.setFixedCellHeight(120);
+        list.setCellRenderer((jlist, value, index, isSelected, focus) -> {
+            JPanel p = new JPanel(new BorderLayout());
+            JLabel icon = new JLabel(UIManager.getIcon("OptionPane.informationIcon"));
+            icon.setHorizontalAlignment(SwingConstants.CENTER);
+            JLabel name = new JLabel(value.getName());
+            name.setFont(new Font("SansSerif", Font.BOLD, 16));
+            name.setHorizontalAlignment(SwingConstants.CENTER);
+            p.add(icon, BorderLayout.CENTER);
+            p.add(name, BorderLayout.SOUTH);
+            if(isSelected) p.setBackground(new Color(200,200,255));
+            return p;
+        });
         add(new JScrollPane(list), BorderLayout.CENTER);
 
         JPanel input = new JPanel();
-        input.add(new JLabel("Name:"));
+        JLabel nLab = new JLabel("Name:");
+        nLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        input.add(nLab);
+        nameField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         input.add(nameField);
-        input.add(new JLabel("URL:"));
+        JLabel uLab = new JLabel("URL:");
+        uLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        input.add(uLab);
+        urlField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         input.add(urlField);
         JButton addBtn = new JButton("Add");
+        addBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        addBtn.addMouseListener(new MouseAdapter() {
+            @Override public void mouseEntered(MouseEvent e) {
+                addBtn.setFont(addBtn.getFont().deriveFont(18f));
+            }
+            @Override public void mouseExited(MouseEvent e) {
+                addBtn.setFont(addBtn.getFont().deriveFont(16f));
+            }
+        });
         input.add(addBtn);
         add(input, BorderLayout.NORTH);
 
         JPanel bottom = new JPanel();
-        bottom.add(new JLabel("Search:"));
+        JLabel sLab = new JLabel("Search:");
+        sLab.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        bottom.add(sLab);
+        searchField.setFont(new Font("SansSerif", Font.PLAIN, 16));
         bottom.add(searchField);
         JButton delBtn = new JButton("Delete");
+        delBtn.setFont(new Font("SansSerif", Font.BOLD, 16));
+        delBtn.addMouseListener(new MouseAdapter() {
+            @Override public void mouseEntered(MouseEvent e) {
+                delBtn.setFont(delBtn.getFont().deriveFont(18f));
+            }
+            @Override public void mouseExited(MouseEvent e) {
+                delBtn.setFont(delBtn.getFont().deriveFont(16f));
+            }
+        });
         bottom.add(delBtn);
         add(bottom, BorderLayout.SOUTH);
+
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    Website w = list.getSelectedValue();
+                    if(w != null) {
+                        try {
+                            Desktop.getDesktop().browse(new URI(w.getUrl()));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
 
         addBtn.addActionListener(e -> {
             String n = nameField.getText();

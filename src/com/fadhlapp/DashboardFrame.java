@@ -10,24 +10,34 @@ public class DashboardFrame extends JFrame {
     public DashboardFrame() {
         super("Fadhl Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setupUI();
     }
 
     private void setupUI() {
-        JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("YouTube Videos", new MediaPanel(store.getYoutubeVideos()));
-        tabs.addTab("Instagram Videos", new MediaPanel(store.getInstagramVideos()));
-        tabs.addTab("Instagram Photos", new MediaPanel(store.getInstagramPhotos()));
-        tabs.addTab("Personal Photos", new MediaPanel(store.getPersonalPhotos()));
-        tabs.addTab("Websites", new WebsitesPanel(store.getWebsites()));
-        tabs.addTab("Accounts", new AccountsPanel(store.getAccounts()));
-        add(tabs, BorderLayout.CENTER);
+        JPanel grid = new JPanel(new GridLayout(2, 3, 10, 10));
+        grid.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        grid.add(wrapPanel("YouTube Videos", new MediaPanel(store.getYoutubeVideos())));
+        grid.add(wrapPanel("Instagram Videos", new MediaPanel(store.getInstagramVideos())));
+        grid.add(wrapPanel("Instagram Photos", new MediaPanel(store.getInstagramPhotos())));
+        grid.add(wrapPanel("Personal Photos", new MediaPanel(store.getPersonalPhotos())));
+        grid.add(wrapPanel("Websites", new WebsitesPanel(store.getWebsites())));
+        grid.add(wrapPanel("Accounts", new AccountsPanel(store.getAccounts())));
+
+        add(new JScrollPane(grid), BorderLayout.CENTER);
 
         JButton themeBtn = new JButton("Toggle Theme");
         add(themeBtn, BorderLayout.SOUTH);
         themeBtn.addActionListener(e -> toggleTheme());
+    }
+
+    private JPanel wrapPanel(String title, JComponent component) {
+        JPanel p = new JPanel(new BorderLayout());
+        p.setBorder(BorderFactory.createTitledBorder(title));
+        p.add(component, BorderLayout.CENTER);
+        return p;
     }
 
     private void toggleTheme() {
