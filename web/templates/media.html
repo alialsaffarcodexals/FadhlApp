@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Media</title>
+<link rel="stylesheet" href="../static/style.css">
+<script src="../static/script.js" defer></script>
+</head>
+<body>
+<h1>Media</h1>
+<div class="grid">
+  {{range .}}
+  <div class="card">
+    <video src="{{.Path}}" controls width="200"></video>
+    <p>{{.Name}}</p>
+  </div>
+  {{end}}
+</div>
+<a href="/dashboard">Return to menu</a>
+</body>
+</html>
